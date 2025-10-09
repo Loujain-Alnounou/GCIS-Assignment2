@@ -15,26 +15,28 @@ def calculate_average_books(filename):
         
         total_books = 0
         valid_count = 0
-        borrowers.seek(28,0)
+        borrowers.readline()
 
-        for line in borrowers:
-            line = line.strip()
-            parts = line.split(',')
-            if len(parts) == 3 and int(parts[1])>=0 and len(parts[2])==10 and parts[2][4]==parts[2][7]=="-":
-                try:
-                    books = int(parts[1].strip())
+        try:
+            for line in borrowers:
+                line = line.strip()
+                parts = line.split(',')
+                if len(parts) == 3 and int(parts[1])>=0 and len(parts[2])==10 and parts[2][4]==parts[2][7]=="-":
+                        books = int(parts[1].strip())
 
-                    total_books += books
-                    valid_count += 1
-                except ValueError:
-                    continue
+                        total_books += books
+                        valid_count += 1
+            total_books/valid_count
+        except (ValueError,ZeroDivisionError):
+            continue
             
     except FileNotFoundError:
-        print(f"Error: File {filename} not found.")
+        print("Error: File " + filename + " not found.")
     except Exception as e:
-        print(f"Error reading line: {e}")
-    borrowers.close()
-    return total_books/valid_count
+        print("Error: " + e)
+    finally:
+        borrowers.close()
+        return total_books/valid_count
 
 
 def main(): #calling the main function

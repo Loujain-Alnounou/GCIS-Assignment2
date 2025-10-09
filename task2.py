@@ -6,7 +6,7 @@ def main():
 def process_borrowers(filename,current_date):
     try:
         borrowers =  open(filename, 'r')
-        borrowers.seek(28,0)
+        borrowers.readline()
         ledger = ""
         fine = 0
 
@@ -18,18 +18,15 @@ def process_borrowers(filename,current_date):
                     fine = calculate_fine(int(parts[1]),parts[2],current_date)
                     fine = int(fine)
                     if fine > 0:
-                        ledger += f"{parts[0]}: Fine: ${fine}\n"
+                        ledger += parts[0]+": Fine: $"+{fine}+"\n"
                     else:
-                        ledger += f"{parts[0]}: No dues\n"
-                else:
-                    ledger += "Error\n"
-            except IndexError:
-                continue
+                        ledger += parts[0]+": No dues\n"
+
+            except Exception as e:
+                ledger += "Error reading line: "+ {e}+"\n"
 
     except FileNotFoundError:
-        print(f"Error: File {filename} not found.")
-    except Exception as e:
-        print(f"Error reading line: {e}")
+        print("Error: File " + filename + " not found.")
     finally:
         borrowers.close()
         return ledger
