@@ -27,8 +27,8 @@ def calculate_average_books(filename):
                         total_books += books
                         valid_count += 1
             total_books/valid_count
-        except (ValueError,ZeroDivisionError):
-            continue
+        except (ValueError,ZeroDivisionError, IndexError) as e:
+            print("Error: " + e)
             
     except FileNotFoundError:
         print("Error: File " + filename + " not found.")
